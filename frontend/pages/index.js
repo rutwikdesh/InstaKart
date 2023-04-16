@@ -1,7 +1,9 @@
+import Banner from "@/components/Banner"
+
 export default function Home() {
   return (
     <main>
-      Home
+      <Banner />
       <p>
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dicta, dolores beatae quaerat ad esse, laboriosam facere pariatur reiciendis, vitae debitis asperiores hic aliquid dignissimos quam porro cum quasi quisquam consequatur.
         Lorem ipsum dolor sit amet consectetur adipisicing elit. In, illo id atque earum tempora, velit eaque magni eos odit ipsa, dolor quasi nobis est maxime fugiat numquam magnam doloribus sapiente.
