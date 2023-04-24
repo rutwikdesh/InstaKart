@@ -8,6 +8,7 @@ import { IoMdHeartEmpty } from "react-icons/io";
 import { BsCart } from "react-icons/bs";
 import { BiMenuAltRight } from "react-icons/bi";
 import { VscChromeClose } from "react-icons/vsc";
+import { fetchDataFromApi } from '@/utils/api';
 
 
 const Header = () => {
@@ -15,23 +16,24 @@ const Header = () => {
   const [showCatMenu, setShowCatMenu] = useState(false);
   const [show, setShow] = useState("translate-y-0");
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [categories, setCategories] = useState(null);
 
   const controlNavbar = () => {
-    if(window.scrollY > 200){
-      if(window.scrollY > lastScrollY && !mobileMenu){
+    if (window.scrollY > 200) {
+      if (window.scrollY > lastScrollY && !mobileMenu) {
         setShow("-translate-y-[80px]");
       }
-      else{
+      else {
         setShow("shadow-sm");
       }
     }
-    else{
+    else {
       setShow("translate-y-0");
     }
     setLastScrollY(window.scrollY);
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     window.addEventListener("scroll", controlNavbar);
 
     return () => {
@@ -39,10 +41,20 @@ const Header = () => {
     }
   }, [lastScrollY]);
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    const { data } = await fetchDataFromApi("/api/categories?populate=*");
+    setCategories(data);
+  };
+
   return (
     <header
       className={`w-full h-[50px] md:h-[80px] bg-white flex items-center justify-between z-20 sticky top-0 transition-transform duration-300 ${show}`}
     >
+      {console.log(categories)}
       <Wrapper className="h-[60px] flex justify-between items-center">
 
         <Link href="/">
@@ -50,13 +62,17 @@ const Header = () => {
         </Link>
 
         <Menu
-          showCatMenu={showCatMenu} setShowCatMenu={setShowCatMenu}
+          showCatMenu={showCatMenu}
+          setShowCatMenu={setShowCatMenu}
+          categories={categories}
         />
+
 
         {mobileMenu && <MenuMobile
           showCatMenu={showCatMenu}
           setShowCatMenu={setShowCatMenu}
           setMobileMenu={setMobileMenu}
+          categories={categories}
         />}
 
         <div className='flex items-center gap-2 text-black'>

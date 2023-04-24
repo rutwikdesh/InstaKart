@@ -1,8 +1,9 @@
 import Banner from "@/components/Banner"
 import ProductCard from "@/components/ProductCard"
 import Wrapper from "@/components/Wrapper"
+import { fetchDataFromApi } from "@/utils/api";
 
-export default function Home() {
+export default function Home({ products }) {
   return (
     <main>
       <Banner />
@@ -21,20 +22,22 @@ export default function Home() {
         {/* Heading End */}
 
         {/* Product Grid Start */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-14px-5 md:px-0">
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-14px-5 md:px-0 items-center">
+          {products?.data?.map((product) => (
+            <ProductCard key={product.id} data={product} />
+          ))}
         </div>
         {/* Product Grid End */}
 
       </Wrapper>
     </main>
   )
+}
+
+export async function getStaticProps() {
+  const products = await fetchDataFromApi("/api/products?populate=*");
+
+  return {
+    props: { products }, // will be passed to the page component as props
+  }
 }
